@@ -17,12 +17,13 @@ Database Connection
 --------------------------------------------*/
 const conn = mysql.createConnection({
   host: 'localhost',
-  user: 'root', /* MySQL User */
-  password: '', /* MySQL Password */
+  user: 'michael', /* MySQL User */
+  password: 'michael', /* MySQL Password */
   database: 'node_restapi', /* MySQL Database */
   
 });
    
+
 
 /*------------------------------------------
 --------------------------------------------
