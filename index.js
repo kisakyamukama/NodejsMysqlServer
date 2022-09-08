@@ -19,7 +19,7 @@ const conn = mysql.createConnection({
   host: 'localhost',
   user: 'michael', /* MySQL User */
   password: 'michael', /* MySQL Password */
-  database: 'node_restapi', /* MySQL Database */
+  database: 'todo', /* MySQL Database */
   
 });
    
@@ -36,46 +36,49 @@ conn.connect((err) =>{
 });
    
 /**
- * Get All Items
+ * Get All Todos
  *
  * @return response()
  */
-app.get('/api/items',(req, res) => {
-  let sqlQuery = "SELECT * FROM items";
+app.get('/api/todo',(req, res) => {
+  let sqlQuery = "SELECT * FROM todo_list";
   
   let query = conn.query(sqlQuery, (err, results) => {
     if(err) throw err;
-    res.send(apiResponse(results));
+    res.json(apiResponse(results));
   });
 });
    
 /**
- * Get Single Item
+ * Get Single todo
  *
  * @return response()
  */
-app.get('/api/items/:id',(req, res) => {
-  let sqlQuery = "SELECT * FROM items WHERE id=" + req.params.id;
+app.get('/api/todo/:id',(req, res) => {
+  let sqlQuery = "SELECT * FROM todo_list WHERE id=" + req.params.id;
     
   let query = conn.query(sqlQuery, (err, results) => {
     if(err) throw err;
-    res.send(apiResponse(results));
+    res.json(apiResponse(results));
   });
 });
    
+
 /**
- * Create New Item
+ * Create New todo
  *
  * @return response()
  */
-app.post('/api/items',(req, res) => {
-  let data = {title: req.body.title, body: req.body.body};
+app.post('/api/todo',(req, res) => {
+  console.log(req.body)
+  let data = {todo: req.body.todo, isDone: req.body.isDone,dueDate: req.body.dueDate, dueTime: req.body.dueTime};
   
-  let sqlQuery = "INSERT INTO items SET ?";
+  let sqlQuery = "INSERT INTO todo_list SET ?";
   
   let query = conn.query(sqlQuery, data,(err, results) => {
     if(err) throw err;
-    res.send(apiResponse(results));
+    console.log(results)
+    res.json(apiResponse(results));
   });
 });
    
@@ -85,11 +88,11 @@ app.post('/api/items',(req, res) => {
  * @return response()
  */
 app.put('/api/items/:id',(req, res) => {
-  let sqlQuery = "UPDATE items SET title='"+req.body.title+"', body='"+req.body.body+"' WHERE id="+req.params.id;
+  let sqlQuery = "UPDATE todo_list SET title='"+req.body.title+"', body='"+req.body.body+"' WHERE id="+req.params.id;
   
   let query = conn.query(sqlQuery, (err, results) => {
     if(err) throw err;
-    res.send(apiResponse(results));
+    res.json(apiResponse(results));
   });
 });
    
@@ -98,12 +101,12 @@ app.put('/api/items/:id',(req, res) => {
  *
  * @return response()
  */
-app.delete('/api/items/:id',(req, res) => {
-  let sqlQuery = "DELETE FROM items WHERE id="+req.params.id+"";
+app.delete('/api/todo/:id',(req, res) => {
+  let sqlQuery = "DELETE FROM todo_list WHERE id="+req.params.id+"";
     
   let query = conn.query(sqlQuery, (err, results) => {
     if(err) throw err;
-      res.send(apiResponse(results));
+      res.json(apiResponse(results));
   });
 });
   
@@ -113,7 +116,7 @@ app.delete('/api/items/:id',(req, res) => {
  * @return response()
  */
 function apiResponse(results){
-    return JSON.stringify({"status": 200, "error": null, "response": results});
+    return {"status": 200, "error": null, "response": results};
 }
    
 /*------------------------------------------
@@ -121,6 +124,6 @@ function apiResponse(results){
 Server listening
 --------------------------------------------
 --------------------------------------------*/
-app.listen(3000,() =>{
-  console.log('Server started on port 3000...');
+app.listen(3001,() =>{
+  console.log('Server started on port 3001...');
 });
