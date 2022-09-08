@@ -87,10 +87,12 @@ app.post('/api/todo',(req, res) => {
  *
  * @return response()
  */
-app.put('/api/items/:id',(req, res) => {
-  let sqlQuery = "UPDATE todo_list SET title='"+req.body.title+"', body='"+req.body.body+"' WHERE id="+req.params.id;
+app.put('/api/todo/:id',(req, res) => {
+  let isDone = req.body.isDone ? 1:0;
+  let sqlQuery = "UPDATE todo_list SET todo='"+req.body.todo+"', isDone='"+isDone+"', dueDate='"+req.body.dueDate+"', dueTime='"+req.body.dueTime+"' WHERE id="+req.params.id;
   
   let query = conn.query(sqlQuery, (err, results) => {
+    console.log(err)
     if(err) throw err;
     res.json(apiResponse(results));
   });
